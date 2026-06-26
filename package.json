@@ -1,0 +1,89 @@
+{
+  "name": "strapi-plugin-image-rotate",
+  "version": "1.0.0",
+  "description": "Rotate Media Library images 90° in place from the Content Manager and a dedicated admin page. Bypasses Strapi's flaky `replace` flow by overwriting the file via the active upload provider and regenerating thumbnails. Strapi v5.",
+  "keywords": [
+    "strapi",
+    "plugin",
+    "strapi-plugin",
+    "strapi-v5",
+    "media-library",
+    "upload",
+    "image",
+    "rotate",
+    "sharp",
+    "thumbnails"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Your Name",
+    "email": "you@example.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/strapi-plugin-image-rotate.git"
+  },
+  "homepage": "https://github.com/your-org/strapi-plugin-image-rotate#readme",
+  "bugs": {
+    "url": "https://github.com/your-org/strapi-plugin-image-rotate/issues"
+  },
+  "type": "commonjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "source": "./admin/src/index.js",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "source": "./server/src/index.js",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@strapi/sdk-plugin": "^6.0.0",
+    "@strapi/design-system": "^2.0.0",
+    "@strapi/icons": "^2.0.0",
+    "prettier": "^3.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-intl": "^6.6.0",
+    "react-router-dom": "^6.26.0",
+    "sharp": "^0.33.0",
+    "styled-components": "^6.1.0"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/design-system": "^2.0.0",
+    "@strapi/icons": "^2.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "sharp": "^0.32.0 || ^0.33.0 || ^0.34.0",
+    "styled-components": "^6.0.0"
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "image-rotate",
+    "displayName": "Image Rotate",
+    "description": "Rotate Media Library images 90° in place — no buggy replace."
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=6.0.0"
+  }
+}
