@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Admin routes are mounted under `/<plugin-id>` (i.e. `/image-rotate/...`) in the
  * admin namespace and are only reachable from the authenticated admin panel.
@@ -11,7 +9,7 @@
  *     is needed, and Super Admins always pass. Remove that entry to allow any
  *     authenticated admin, or swap it for a dedicated `plugin::image-rotate.*` action.
  */
-module.exports = {
+export default {
   admin: {
     type: 'admin',
     routes: [

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = ({ strapi }) => {
+export default ({ strapi }) => {
   // Surface a clear warning if no upload provider can be resolved (extremely
   // unlikely, but it makes misconfiguration obvious instead of failing mid-rotate).
   if (!strapi.plugin('upload')?.provider) {

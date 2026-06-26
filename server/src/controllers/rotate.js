@@ -1,8 +1,6 @@
-'use strict';
-
 const PLUGIN_ID = 'image-rotate';
 
-module.exports = ({ strapi }) => ({
+export default ({ strapi }) => ({
   /**
    * POST /image-rotate/rotate/:id
    * Body: { degrees?: number }  // multiple of 90, clockwise. Defaults to 90.

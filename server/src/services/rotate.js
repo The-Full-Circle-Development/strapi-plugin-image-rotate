@@ -1,11 +1,9 @@
-'use strict';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { Readable } from 'stream';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const { Readable } = require('stream');
-
-const sharp = require('sharp');
+import sharp from 'sharp';
 
 const FILE_MODEL_UID = 'plugin::upload.file';
 
@@ -49,7 +47,7 @@ const normaliseDegrees = (degrees) => {
   return ((Math.round(n / 90) * 90) % 360 + 360) % 360;
 };
 
-module.exports = ({ strapi }) => ({
+export default ({ strapi }) => ({
   /**
    * Whether a given mime type can be rotated.
    */

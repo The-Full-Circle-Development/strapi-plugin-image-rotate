@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Runs before bootstrap. Nothing to register at the moment — the rotate route is
  * protected by the existing `plugin::upload.assets.update` permission, so we don't
@@ -13,4 +11,4 @@
  *   ]);
  *   // -> action uid: `plugin::image-rotate.rotate`
  */
-module.exports = ({ strapi }) => {};
+export default ({ strapi }) => {};

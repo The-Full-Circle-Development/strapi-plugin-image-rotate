@@ -1,7 +1,5 @@
-'use strict';
+import rotate from './rotate';
 
-const rotate = require('./rotate');
-
-module.exports = {
+export default {
   rotate,
 };
