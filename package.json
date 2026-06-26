@@ -51,6 +51,7 @@
     "watch": "strapi-plugin watch",
     "watch:link": "strapi-plugin watch:link",
     "verify": "strapi-plugin verify",
+    "prepare": "strapi-plugin build",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {},
