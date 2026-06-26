@@ -1,8 +1,11 @@
 # Dependencies
 node_modules/
 
-# Build output (published via the package.json `files` field, not committed)
-dist/
+# Build output: intentionally COMMITTED so this plugin can be consumed as a
+# `github:` git dependency under pnpm v10, which refuses to run build scripts
+# (prepare) on git-hosted deps unless explicitly allowlisted. Shipping the
+# prebuilt dist/ lets consumers install it with no build step. Rebuild with
+# `pnpm run build` (which cleans dist/ first) before committing changes.
 
 # Strapi
 .strapi/
