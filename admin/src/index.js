@@ -1,35 +1,24 @@
-import { PLUGIN_ID } from './pluginId';
-import { Initializer } from './components/Initializer';
-import { RotateDocumentAction } from './components/RotateDocumentAction';
 import { RotatePreviewActions } from './components/RotatePreviewActions';
 import { prefixPluginTranslations } from './utils/getTranslation';
 
 export default {
-  register(app) {
-    // No menu link / standalone page on purpose: rotation lives where you edit
-    // images, not in its own nav tab. See bootstrap() for the two surfaces.
-    app.registerPlugin({
-      id: PLUGIN_ID,
-      initializer: Initializer,
-      isReady: false,
-      name: PLUGIN_ID,
-    });
-  },
+  // No menu link, no standalone page, and no Content Manager document action on
+  // purpose: rotation lives where you edit an image — next to Crop in the asset
+  // dialog. `register` must stay a function (Strapi's StrapiApp calls it
+  // unguarded), but a pure-injection plugin has nothing to register.
+  register() {},
 
-  bootstrap(app) {
-    // Surface 1 — Content Manager: a "Rotate images" document action that opens
-    // a modal listing every image on the current entry. Self-hides when the
-    // entry has no rotatable images (see RotateDocumentAction).
-    const contentManager = app.getPlugin('content-manager');
-    if (contentManager?.apis?.addDocumentAction) {
-      contentManager.apis.addDocumentAction((actions) => [...actions, RotateDocumentAction]);
-    }
-
-    // Surface 2 — Media Library asset dialog (also reused by the CM media field).
-    // @strapi/upload has no injection zone, so we publish the rotate control on a
-    // global; a small patch to @strapi/upload's PreviewBox renders it next to Crop.
+  bootstrap() {
+    // @strapi/upload exposes no admin injection zone, so we publish the rotate
+    // control on a global; a small patch to @strapi/upload's PreviewBox renders
+    // it next to Crop (see the cms `patches/` dir). The same PreviewBox dialog is
+    // reused by BOTH the Media Library and the Content Manager media field, so
+    // this single injection covers both surfaces.
     if (typeof window !== 'undefined') {
-      window.__strapiImageRotate = { PreviewActions: RotatePreviewActions };
+      window.__strapiImageRotate = {
+        ...(window.__strapiImageRotate || {}),
+        PreviewActions: RotatePreviewActions,
+      };
     }
   },
 
@@ -38,7 +27,7 @@ export default {
       locales.map(async (locale) => {
         try {
           const { default: data } = await import(`./translations/${locale}.json`);
-          return { data: prefixPluginTranslations(data, PLUGIN_ID), locale };
+          return { data: prefixPluginTranslations(data), locale };
         } catch {
           return { data: {}, locale };
         }

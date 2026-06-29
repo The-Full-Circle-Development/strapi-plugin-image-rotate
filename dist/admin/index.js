@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
-const React = require("react");
 const jsxRuntime = require("react/jsx-runtime");
+const React = require("react");
 const designSystem = require("@strapi/design-system");
 const admin = require("@strapi/strapi/admin");
 function _interopNamespace(e) {
@@ -37,14 +37,6 @@ const __variableDynamicImportRuntimeHelper = (glob, path, segs) => {
       )
     );
   });
-};
-const PLUGIN_ID = "image-rotate";
-const Initializer = ({ setPlugin }) => {
-  const ref = React.useRef(setPlugin);
-  React.useEffect(() => {
-    ref.current(PLUGIN_ID);
-  }, []);
-  return null;
 };
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
@@ -648,28 +640,7 @@ createFormattedComponent("formatList");
 createFormattedComponent("formatDisplayName");
 createFormattedDateTimePartsComponent("formatDate");
 createFormattedDateTimePartsComponent("formatTime");
-const isRotatableImage = (file) => !!file && typeof file === "object" && typeof file.mime === "string" && file.mime.startsWith("image/") && file.mime !== "image/svg+xml" && file.mime !== "image/gif" && (typeof file.id === "number" || typeof file.id === "string") && !!file.url;
-const collectImageFiles = (document) => {
-  const out = [];
-  const seen = /* @__PURE__ */ new Set();
-  if (!document || typeof document !== "object") return out;
-  for (const [field, value] of Object.entries(document)) {
-    if (!value) continue;
-    const items = Array.isArray(value) ? value : [value];
-    for (const item of items) {
-      if (isRotatableImage(item) && !seen.has(item.id)) {
-        seen.add(item.id);
-        out.push({ field, file: item });
-      }
-    }
-  }
-  return out;
-};
-const bustCache = (url, stamp) => {
-  if (!url) return url;
-  if (!stamp) return url;
-  return `${url}${url.includes("?") ? "&" : "?"}v=${stamp}`;
-};
+const PLUGIN_ID = "image-rotate";
 const RotateRightIcon = (props) => /* @__PURE__ */ jsxRuntime.jsxs("svg", { width: "1em", height: "1em", viewBox: "0 0 24 24", fill: "none", "aria-hidden": true, focusable: "false", ...props, children: [
   /* @__PURE__ */ jsxRuntime.jsx(
     "path",
@@ -751,133 +722,63 @@ const RotateActions = ({ fileId, onRotated, disabled = false }) => {
     )
   ] });
 };
-const RotateModal = ({ images }) => {
-  const { formatMessage } = useIntl();
-  const [overrides, setOverrides] = React.useState({});
-  const handleRotated = (fileId, data) => {
-    setOverrides((prev) => ({
-      ...prev,
-      [fileId]: {
-        width: data?.width,
-        height: data?.height,
-        url: data?.url,
-        formats: data?.formats,
-        stamp: Date.now()
-      }
-    }));
-  };
-  if (!images.length) {
-    return /* @__PURE__ */ jsxRuntime.jsx(designSystem.Typography, { textColor: "neutral600", children: formatMessage({
-      id: `${PLUGIN_ID}.modal.empty`,
-      defaultMessage: "This entry has no rotatable images."
-    }) });
-  }
-  return /* @__PURE__ */ jsxRuntime.jsx(designSystem.Flex, { direction: "column", alignItems: "stretch", gap: 4, children: images.map(({ field, file }) => {
-    const o = overrides[file.id];
-    const width = o?.width ?? file.width;
-    const height = o?.height ?? file.height;
-    const previewUrl = o?.url ?? file.formats?.thumbnail?.url ?? file.url;
-    const src = bustCache(previewUrl, o?.stamp ?? file.updatedAt);
-    return /* @__PURE__ */ jsxRuntime.jsxs(
-      designSystem.Flex,
-      {
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: 4,
-        hasRadius: true,
-        padding: 3,
-        background: "neutral100",
-        children: [
-          /* @__PURE__ */ jsxRuntime.jsxs(designSystem.Flex, { gap: 3, alignItems: "center", children: [
-            /* @__PURE__ */ jsxRuntime.jsx(
-              designSystem.Box,
-              {
-                tag: "img",
-                src,
-                alt: file.name,
-                width: "56px",
-                height: "56px",
-                hasRadius: true,
-                style: { objectFit: "cover", border: "1px solid rgba(0,0,0,0.1)" }
-              },
-              src
-            ),
-            /* @__PURE__ */ jsxRuntime.jsxs(designSystem.Flex, { direction: "column", alignItems: "flex-start", gap: 1, children: [
-              /* @__PURE__ */ jsxRuntime.jsx(designSystem.Typography, { fontWeight: "bold", ellipsis: true, children: file.name }),
-              /* @__PURE__ */ jsxRuntime.jsxs(designSystem.Typography, { variant: "pi", textColor: "neutral600", children: [
-                field,
-                width && height ? ` · ${width}×${height}` : ""
-              ] })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxRuntime.jsx(RotateActions, { fileId: file.id, onRotated: (data) => handleRotated(file.id, data) })
-        ]
-      },
-      `${field}-${file.id}`
-    );
-  }) });
+const bustCache = (url, stamp) => {
+  if (!url) return url;
+  if (!stamp) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}v=${stamp}`;
 };
-const RotateDocumentAction = ({ document }) => {
-  const { formatMessage } = useIntl();
-  const images = collectImageFiles(document);
-  if (!images.length) {
-    return null;
-  }
-  return {
-    label: formatMessage({
-      id: `${PLUGIN_ID}.action.rotateImages`,
-      defaultMessage: "Rotate images"
-    }),
-    icon: /* @__PURE__ */ jsxRuntime.jsx(RotateRightIcon, {}),
-    position: ["panel"],
-    dialog: {
-      type: "modal",
-      title: formatMessage({
-        id: `${PLUGIN_ID}.modal.title`,
-        defaultMessage: "Rotate images"
-      }),
-      content: /* @__PURE__ */ jsxRuntime.jsx(RotateModal, { images }),
-      footer: ({ onClose }) => /* @__PURE__ */ jsxRuntime.jsx(designSystem.Button, { onClick: onClose, variant: "tertiary", children: formatMessage({ id: `${PLUGIN_ID}.modal.close`, defaultMessage: "Close" }) })
-    }
-  };
-};
-RotateDocumentAction.type = `${PLUGIN_ID}-rotate-images`;
 const RotatePreviewActions = ({ asset }) => {
+  const ref = React.useRef(null);
   if (!asset || !asset.id || asset.isLocal) return null;
   const mime = typeof asset.mime === "string" ? asset.mime.toLowerCase() : "";
   if (!mime.startsWith("image/") || mime === "image/svg+xml" || mime === "image/gif") {
     return null;
   }
-  return /* @__PURE__ */ jsxRuntime.jsx(RotateActions, { fileId: asset.id, onRotated: () => window.location.reload() });
+  const handleRotated = () => {
+    if (asset.isUrlSigned) {
+      window.location.reload();
+      return;
+    }
+    const root = ref.current;
+    const scope = root?.closest('[role="dialog"]') ?? document;
+    const token = asset.hash || "";
+    let busted = false;
+    scope.querySelectorAll("img").forEach((img) => {
+      const src = img.getAttribute("src");
+      if (!src) return;
+      if (token && !src.includes(token)) return;
+      img.setAttribute("src", bustCache(src, Date.now()));
+      busted = true;
+    });
+    if (!busted) window.location.reload();
+  };
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { ref, children: /* @__PURE__ */ jsxRuntime.jsx(RotateActions, { fileId: asset.id, onRotated: handleRotated }) });
 };
 const prefixPluginTranslations = (translations, pluginId = PLUGIN_ID) => Object.keys(translations).reduce((acc, key) => {
   acc[`${pluginId}.${key}`] = translations[key];
   return acc;
 }, {});
 const index = {
-  register(app) {
-    app.registerPlugin({
-      id: PLUGIN_ID,
-      initializer: Initializer,
-      isReady: false,
-      name: PLUGIN_ID
-    });
+  // No menu link, no standalone page, and no Content Manager document action on
+  // purpose: rotation lives where you edit an image — next to Crop in the asset
+  // dialog. `register` must stay a function (Strapi's StrapiApp calls it
+  // unguarded), but a pure-injection plugin has nothing to register.
+  register() {
   },
-  bootstrap(app) {
-    const contentManager = app.getPlugin("content-manager");
-    if (contentManager?.apis?.addDocumentAction) {
-      contentManager.apis.addDocumentAction((actions) => [...actions, RotateDocumentAction]);
-    }
+  bootstrap() {
     if (typeof window !== "undefined") {
-      window.__strapiImageRotate = { PreviewActions: RotatePreviewActions };
+      window.__strapiImageRotate = {
+        ...window.__strapiImageRotate || {},
+        PreviewActions: RotatePreviewActions
+      };
     }
   },
   async registerTrads({ locales }) {
     return Promise.all(
       locales.map(async (locale) => {
         try {
-          const { default: data } = await __variableDynamicImportRuntimeHelper(/* @__PURE__ */ Object.assign({ "./translations/en.json": () => Promise.resolve().then(() => require("./en-vnDi9fbN.js")), "./translations/fr.json": () => Promise.resolve().then(() => require("./fr-CPlLjthQ.js")) }), `./translations/${locale}.json`, 3);
-          return { data: prefixPluginTranslations(data, PLUGIN_ID), locale };
+          const { default: data } = await __variableDynamicImportRuntimeHelper(/* @__PURE__ */ Object.assign({ "./translations/en.json": () => Promise.resolve().then(() => require("./en-BbZ2wrIb.js")), "./translations/fr.json": () => Promise.resolve().then(() => require("./fr-khD5r_6N.js")) }), `./translations/${locale}.json`, 3);
+          return { data: prefixPluginTranslations(data), locale };
         } catch {
           return { data: {}, locale };
         }

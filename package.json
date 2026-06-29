@@ -1,7 +1,7 @@
 {
   "name": "strapi-plugin-image-rotate",
-  "version": "1.0.0",
-  "description": "Rotate Media Library images 90° in place from the Content Manager and a dedicated admin page. Bypasses Strapi's flaky `replace` flow by overwriting the file via the active upload provider and regenerating thumbnails. Strapi v5.",
+  "version": "1.1.0",
+  "description": "Rotate Media Library images 90° in place with a button next to Crop in the asset edit dialog (Media Library and Content Manager media fields). Bypasses Strapi's flaky `replace` flow by overwriting the file via the active upload provider and regenerating thumbnails. Strapi v5.",
   "keywords": [
     "strapi",
     "plugin",
