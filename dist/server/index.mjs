@@ -276,7 +276,8 @@ const rotate = ({ strapi }) => ({
           size: fileData.size,
           formats: fileData.formats,
           url: fileData.url || dbFile.url,
-          provider_metadata: fileData.provider_metadata
+          provider_metadata: fileData.provider_metadata,
+          updatedAt: new Date()
         }
       });
       try {

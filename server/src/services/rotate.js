@@ -255,6 +255,11 @@ export default ({ strapi }) => ({
       }
 
       // Persist the new geometry/formats/url. hash & ext are unchanged on purpose.
+      // `updatedAt` is bumped explicitly: the storage key/URL stay identical, so the
+      // ONLY signal a consumer has that the bytes changed is the timestamp. The Query
+      // Engine (`strapi.db.query`) does not auto-manage timestamps, so without this the
+      // record would look untouched and URL-based cache-busters (e.g. `?v=updatedAt`)
+      // never invalidate — leaving the rotated image stale behind immutable caches.
       const updated = await strapi.db.query(FILE_MODEL_UID).update({
         where: { id },
         data: {
@@ -264,6 +269,7 @@ export default ({ strapi }) => ({
           formats: fileData.formats,
           url: fileData.url || dbFile.url,
           provider_metadata: fileData.provider_metadata,
+          updatedAt: new Date(),
         },
       });
 
